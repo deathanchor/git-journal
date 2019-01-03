@@ -24,16 +24,17 @@ set -o errexit
 
 title="$@"
 if [[ -n $title ]]; then
-  journalEntry=$journalDir/${file_prefix}_${title/ /_}
+  journalEntry=$journalDir/${file_prefix}_${title// /_}
+  echo $journalEntry = $journalDir/${file_prefix}_${title// /_}
   echo "$title" > $journalEntry
   $EDITOR $journalEntry
 else
   title=${title:=UNTITLED ENTRY}
-  journalEntry=$journalDir/${file_prefix}_${title/ /_}
+  journalEntry=$journalDir/${file_prefix}_${title// /_}
   $EDITOR $journalEntry
   title=$(head -1 $journalEntry)
-  mv $journalEntry $journalDir/${file_prefix}_${title/ /_}
-  journalEntry=$journalDir/${file_prefix}_${title/ /_}
+  mv $journalEntry $journalDir/${file_prefix}_${title// /_}
+  journalEntry=$journalDir/${file_prefix}_${title// /_}
 fi
 date >> $journalEntry
 
