@@ -11,35 +11,35 @@ file_prefix=$(date +%d-%a-%H:%M-%Z)
 
 journalDir=$gitdir/$journalName/$year/$month
 
-mkdir -p $journalDir
+mkdir -p "$journalDir"
 cd $gitdir/$journalName
 
 set +o errexit
-`[ -d .git ] || git rev-parse --git-dir 1>/dev/null 2>&1`
-if [ $? != 0 ]; then
-  echo `pwd` "is not initialized as a git repository"
+
+if ! eval "[ -d .git ] || git rev-parse --git-dir 1>/dev/null 2>&1"; then
+  echo "$(pwd) is not initialized as a git repository"
   exit 1;
 fi
 set -o errexit
 
-title="$@"
+title="$*"
 if [[ -n $title ]]; then
   journalEntry=$journalDir/${file_prefix}_${title// /_}
-  echo $journalEntry = $journalDir/${file_prefix}_${title// /_}
+  echo "journalEntry = $journalDir/${file_prefix}_${title// /_}"
   echo "$title" > $journalEntry
   $EDITOR $journalEntry
 else
   title=${title:=UNTITLED ENTRY}
   journalEntry=$journalDir/${file_prefix}_${title// /_}
   $EDITOR $journalEntry
-  title=$(head -1 $journalEntry)
+  title=$(head -1 "$journalEntry")
   mv $journalEntry $journalDir/${file_prefix}_${title// /_}
   journalEntry=$journalDir/${file_prefix}_${title// /_}
 fi
 date >> $journalEntry
 
-cd $journalDir;
-git add $journalEntry
-git commit -m "$title"
-git push
+cd "$journalDir";
+#git add "$journalEntry"
+#git commit -m "$title"
+#git push
 
