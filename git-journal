@@ -39,7 +39,7 @@ fi
 date >> $journalEntry
 
 cd "$journalDir";
-#git add "$journalEntry"
-#git commit -m "$title"
-#git push
+git add "$journalEntry"
+git commit -m "$title"
+git push
 
